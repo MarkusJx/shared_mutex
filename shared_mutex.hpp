@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <iostream>
 
-#ifdef __unix__
+#if defined(__unix__) || defined(__linux__) || defined(__APPLE__)
 #   define OS_UNIX
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #   define OS_WINDOWS
