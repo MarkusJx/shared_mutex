@@ -76,7 +76,7 @@ Blocking call (not recommended as it will freeze your node.js instance):
 mutex.lock_blocking();
 ```
 
-``shared_mutex.try_lock``
+#### ``shared_mutex.try_lock``
 Try locking the mutex: ``try_lock()`` will return ``true``, if the mutex ownership could
 be acquired. If so, the mutex will now be owned by your shared_mutex instance and must be
 unlocked using ``unlock()``. If another instance already owns the mutex, ``try_lock()``
