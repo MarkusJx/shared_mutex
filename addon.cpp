@@ -16,8 +16,15 @@
 // The mutexes map pointer storing all created mutexes and their names
 std::unique_ptr<std::map<std::string, std::unique_ptr<shared_mutex>>> mutexes = nullptr;
 
-int lastId = 0;
+// The last id
+long long lastId = 0;
 
+/**
+ * Ad an id to a string
+ *
+ * @param name the string to add the id to
+ * @return the random id
+ */
 std::string generateRandomId(const std::string &name) {
     return name + '-' + std::to_string(lastId++);
 }
