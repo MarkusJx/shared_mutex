@@ -6,13 +6,15 @@
   "scripts": {
     "install": "npm run-script build",
     "build": "cmake-js compile",
-    "test": "node test.js",
+    "test": "mocha",
     "pretest": "npm run-script build"
   },
   "author": "MarkusJx",
   "license": "MIT",
   "devDependencies": {
+    "@markusjx/n-api-tools": "^1.0.0",
     "cmake-js": "^6.1.0",
+    "mocha": "^8.2.1",
     "node-addon-api": "^3.1.0"
   }
 }

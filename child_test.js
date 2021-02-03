@@ -1,12 +1,11 @@
 const checker = require('./index');
+const assert = require("assert");
 
-function child_test() {
-    try {
+if (process.argv[2] === "expectFail") {
+    assert.throws(() => {
         new checker.program_mutex("test");
-    } catch (e) {
-        return;
-    }
-    throw new Error("The program should have thrown, but it didn't");
+    }, Error, "A mutex with the name 'test' is already owned by another program");
+} else {
+    const mtx = new checker.program_mutex("test");
+    mtx.delete();
 }
-
-child_test();

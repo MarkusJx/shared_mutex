@@ -1,8 +1,12 @@
 cmake_minimum_required(VERSION 3.15)
 project(is_program_already_running)
 
+execute_process(COMMAND node -p "require('@markusjx/n-api-tools').include"
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE N_API_TOOLS_DIR)
+
 add_compile_definitions(NAPI_CPP_EXCEPTIONS)
-include_directories(${CMAKE_JS_INC})
+include_directories(${CMAKE_JS_INC} ${N_API_TOOLS_DIR})
 
 set(CMAKE_CXX_STANDARD 17)
 

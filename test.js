@@ -1,51 +1,189 @@
 const {fork} = require('child_process');
-const checker = require('./index');
 const assert = require("assert");
 
-console.log("Testing is-program-already-running functionality");
-console.log("========================================\n");
+const mutex = require('./index');
 
-console.log("Creating a new program_mutex instance (mtx1)");
-const mtx1 = new checker.program_mutex("test");
+describe('program_mutex', () => {
+    describe('#new program_mutex', () => {
+        const TEST = "test";
+        let mtx1;
+        it('create: should not throw', () => {
+            mtx1 = new mutex.program_mutex(TEST);
+        });
 
-console.log("Deleting the created program_mutex instance (mtx1)");
-mtx1.delete();
+        it('create: should throw an exception', () => {
+            assert.throws(() => {
+                new mutex.program_mutex(TEST);
+            }, Error, "A mutex with the name 'test' is already owned by this program");
+        });
 
-console.log("========================================\n");
+        it('delete: should not throw', () => {
+            mtx1.delete();
+        });
 
-console.log("Creating a new program_mutex instance (mtx2)")
-const mtx2 = new checker.program_mutex("test");
+        it('delete: should throw', () => {
+            assert.throws(mtx1.delete, Error, "delete() was already called on this instance");
+        });
 
-function error_test() {
-    console.log("Trying to create a new program_mutex instance when another one is already owning the mutex");
-    try {
-        new checker.program_mutex("test");
-    } catch (e) {
-        console.log("The program threw an exception, as expected");
-        return;
-    }
-    throw new Error("The program should have thrown, but it didn't");
-}
+        it('re-create: should not throw', () => {
+            mtx1 = new mutex.program_mutex(TEST);
+        });
 
-error_test();
-console.log("========================================\n");
+        it('create in different process: should throw', (done) => {
+            fork("child_test.js", ["expectFail"]).on('close', (e) => {
+                if (e === 0) {
+                    done();
+                } else {
+                    done("The child process exited with non-zero error code");
+                }
+            });
+        });
 
-console.log("Trying to create a new program_mutex instance in a child process");
-fork("child_test.js");
+        it('re-delete: should not throw', () => {
+            mtx1.delete();
+        });
 
-console.log("Deleting the existing program_mutex instance (mtx2)");
-mtx2.delete();
+        it('create in different process: should not throw', (done) => {
+            fork("child_test.js").on('close', (e) => {
+                if (e === 0) {
+                    done();
+                } else {
+                    done("The child process exited with non-zero error code");
+                }
+            });
+        });
+    });
 
-console.log("========================================\n");
+    describe('#try_create_program_mutex', () => {
+        let mtx;
+        it('create: should return program_mutex', () => {
+            mtx = mutex.try_create_program_mutex("test");
+            assert(mtx !== null, "mtx should not be null");
+        });
 
-console.log("Using try_create to create a program_mutex instance");
-console.log("This call should return a non-null value");
-assert(checker.try_create("test") !== null, "This call should return a non-null value");
+        it('create: should return null', () => {
+            const val = mutex.try_create_program_mutex("test");
+            assert(val === null, "try_create_program_mutex should return null");
+        });
 
-console.log("This call should return null, as another program_mutex instance already owns this mutex");
-assert(checker.try_create("test") === null,
-    "This call should return null, as another program_mutex instance already owns this mutex");
+        it('delete: should not throw', () => {
+            mtx.delete();
+        });
 
-console.log("========================================\n");
+        it('re-create: should return program_mutex', () => {
+            mtx = mutex.try_create_program_mutex("test");
+            assert(mtx !== null, "mtx should not be null");
+            mtx.delete();
+        });
+    });
+});
 
-console.log("Done.");
+describe('shared_mutex', () => {
+    describe('#basic tests', () => {
+        let mtx;
+        it('create: should not throw', () => {
+            mtx = new mutex.shared_mutex("test");
+        });
+
+        it('lock: should not throw', (done) => {
+            mtx.lock().then(() => {
+                done();
+            }, () => {
+                done("lock() threw an error");
+            });
+        });
+
+        it('unlock: should not throw', () => {
+            mtx.unlock();
+        })
+
+        it('lock blocking: should not throw', (done) => {
+            mtx.lock().then(() => {
+                done();
+            }, () => {
+                done("lock() threw an error");
+            });
+        }).timeout(1000);
+
+        it('try_lock: should return false', () => {
+            let res = mtx.try_lock();
+            assert(res === false, "res should be false");
+        });
+
+        it('unlock: should not throw', () => {
+            mtx.unlock();
+        });
+
+        it('try_lock: should return true', () => {
+            let res = mtx.try_lock();
+            assert(res === true);
+        });
+
+        it('delete: should delete the mutex', () => {
+            mtx.delete();
+            assert.throws(mtx.delete, Error, "delete() was already called on this instance");
+        });
+    });
+
+    describe('#shared tests', () => {
+        let mtx1, mtx2;
+        it('create: should not throw', () => {
+            mtx1 = new mutex.shared_mutex("test");
+            mtx2 = new mutex.shared_mutex("test");
+        })
+
+        it('lock first mutex: should lock the mutex', (done) => {
+            mtx1.lock().then(() => done(), done);
+        }).timeout(1000);
+
+        it('try lock the second mutex: should return false', () => {
+            let res = mtx2.try_lock();
+            assert(res === false, "mtx2.try_lock() should return false");
+        });
+
+        it('unlock the first mutex: should not throw', () => {
+            mtx1.unlock();
+        });
+
+        it('try lock the second mutex: should return true', () => {
+            let res = mtx2.try_lock();
+            assert(res === true, "mtx2.try_lock() should return true");
+        });
+
+        it('try lock the first mutex: should return false', () => {
+            let res = mtx1.try_lock();
+            assert(res === false, "mtx1.try_lock() should return false");
+        });
+
+        it('try lock the second mutex again: should return false', () => {
+            let res = mtx2.try_lock();
+            assert(res === false, "mtx2.try_lock() should return false");
+        });
+
+        it('delete the first mutex: should not throw', () => {
+            mtx1.delete();
+        });
+
+        it('try lock the second mutex again: should return false', () => {
+            let res = mtx2.try_lock();
+            assert(res === false, "mtx2.try_lock() should return false");
+        });
+
+        it('unlock the second mutex: should not throw', () => {
+            mtx2.unlock();
+        });
+
+        it('lock the second mutex: should lock the mutex', (done) => {
+            mtx2.lock().then(() => done(), done);
+        });
+
+        it('try lock the second mutex again: should return false', () => {
+            let res = mtx2.try_lock();
+            assert(res === false, "mtx2.try_lock() should return false");
+        });
+
+        it('delete the second mutex: should not throw', () => {
+            mtx2.delete();
+        });
+    });
+});
