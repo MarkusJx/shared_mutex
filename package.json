@@ -1,20 +1,23 @@
 {
   "name": "@markusjx/shared_mutex",
-  "version": "1.0.0",
-  "description": "Check whether your program is already running",
+  "version": "1.0.3",
+  "description": "Shared mutexes for javascript. Can also check if your program is already running.",
   "main": "index.js",
   "scripts": {
     "install": "npm run-script build",
     "build": "cmake-js compile",
     "test": "mocha",
-    "pretest": "npm run-script build"
+    "pretest": "npm run-script build",
+    "clean": "cmake-js clean"
   },
   "author": "MarkusJx",
   "license": "MIT",
   "devDependencies": {
+    "mocha": "^8.2.1"
+  },
+  "dependencies": {
     "@markusjx/n-api-tools": "^1.0.0",
     "cmake-js": "^6.1.0",
-    "mocha": "^8.2.1",
     "node-addon-api": "^3.1.0"
   }
 }
