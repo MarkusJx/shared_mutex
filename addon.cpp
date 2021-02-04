@@ -33,7 +33,7 @@ std::string generateRandomId(const std::string &name) {
  * Create a shared_mutex, which throws an error
  * when a mutex with the same name already exists
  */
-Napi::String createProgramMutex(const Napi::CallbackInfo &info) {
+Napi::String createProcessMutex(const Napi::CallbackInfo &info) {
     CHECK_STRING_ARG0();
 
     // Try creating the mutex, rethrowing all occurring errors
@@ -153,7 +153,7 @@ void deleteMutex(const Napi::CallbackInfo &info) {
  */
 Napi::Object InitAll(Napi::Env env, Napi::Object exports) {
     // Export the functions
-    export(createProgramMutex);
+    export(createProcessMutex);
     export(createMutex);
     export(blockLock);
     export(lock);

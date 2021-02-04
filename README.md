@@ -31,10 +31,10 @@ lock.delete();
 ```
 
 #### ``processMutex.try_create``
-It is also possible to try creating a program_mutex instance using
+It is also possible to try creating a ``processMutex`` instance using
 ``try_create()``. The function will either return ``null`` if a
 semaphore with the same name already exists or a new instance of
-``process_mutex`` if no semaphore with the same name already exists.
+``processMutex`` if no semaphore with the same name already exists.
 ```js
 const try_lock = shared_mutex.processMutex.try_create("YOUR_PROGRAM_NAME");
 ```

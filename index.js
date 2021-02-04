@@ -15,7 +15,7 @@ module.exports = {
 
             // Define 'id' read-only
             Object.defineProperty(this, 'id', {
-                value: native_addon.lib_createProgramMutex(name),
+                value: native_addon.lib_createProcessMutex(name),
                 configurable: true,
                 enumerable: true,
                 writable: false
