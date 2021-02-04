@@ -1,7 +1,7 @@
 const native_addon = require('./build/Release/is_program_already_running');
 
 module.exports = {
-    program_mutex: class {
+    process_mutex: class {
         constructor(name, fromExisting = false, id = "") {
             if (typeof name !== "string") {
                 throw new Error("The name must be of type string");
@@ -68,10 +68,10 @@ module.exports = {
             }
         }
     },
-    try_create_program_mutex: function (name) {
+    try_create_process_mutex: function (name) {
         try {
             let id = native_addon.lib_createProgramMutex(name);
-            return new this.program_mutex(name, true, id);
+            return new this.process_mutex(name, true, id);
         } catch (e) {
             return null;
         }

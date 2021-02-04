@@ -1,5 +1,5 @@
 {
-  "name": "is-program-already-running",
+  "name": "@markusjx/shared_mutex",
   "version": "1.0.0",
   "description": "Check whether your program is already running",
   "main": "index.js",

@@ -3,7 +3,7 @@
  * Uses named mutexes/semaphores to detect if the program is already running.
  * Can also check if other programs using program-is-already-running are running.
  */
-export class program_mutex {
+export class process_mutex {
     /**
      * The id of the mutex. Must not be modified
      */
@@ -84,4 +84,4 @@ export class shared_mutex {
  * @param name the name of the program
  * @return a program_mutex instance or null if the program is already running
  */
-export function try_create_program_mutex(name: string): program_mutex | null;
+export function try_create_process_mutex(name: string): process_mutex | null;

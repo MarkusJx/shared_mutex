@@ -171,4 +171,4 @@ Napi::Object InitAll(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-NODE_API_MODULE(is_program_already_running, InitAll)
+NODE_API_MODULE(shared_mutex, InitAll)

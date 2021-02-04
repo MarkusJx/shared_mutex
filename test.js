@@ -8,12 +8,12 @@ describe('program_mutex', () => {
         const TEST = "test";
         let mtx1;
         it('create: should not throw', () => {
-            mtx1 = new mutex.program_mutex(TEST);
+            mtx1 = new mutex.process_mutex(TEST);
         });
 
         it('create: should throw an exception', () => {
             assert.throws(() => {
-                new mutex.program_mutex(TEST);
+                new mutex.process_mutex(TEST);
             }, Error, "A mutex with the name 'test' is already owned by this program");
         });
 
@@ -26,7 +26,7 @@ describe('program_mutex', () => {
         });
 
         it('re-create: should not throw', () => {
-            mtx1 = new mutex.program_mutex(TEST);
+            mtx1 = new mutex.process_mutex(TEST);
         });
 
         it('create in different process: should throw', (done) => {
@@ -54,15 +54,15 @@ describe('program_mutex', () => {
         });
     });
 
-    describe('#try_create_program_mutex', () => {
+    describe('#try_create_process_mutex', () => {
         let mtx;
         it('create: should return program_mutex', () => {
-            mtx = mutex.try_create_program_mutex("test");
+            mtx = mutex.try_create_process_mutex("test");
             assert(mtx !== null, "mtx should not be null");
         });
 
         it('create: should return null', () => {
-            const val = mutex.try_create_program_mutex("test");
+            const val = mutex.try_create_process_mutex("test");
             assert(val === null, "try_create_program_mutex should return null");
         });
 
@@ -71,7 +71,7 @@ describe('program_mutex', () => {
         });
 
         it('re-create: should return program_mutex', () => {
-            mtx = mutex.try_create_program_mutex("test");
+            mtx = mutex.try_create_process_mutex("test");
             assert(mtx !== null, "mtx should not be null");
             mtx.delete();
         });
