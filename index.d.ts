@@ -6,9 +6,8 @@
 export class processMutex {
     /**
      * The id of the mutex. Must not be modified.
-     * @readonly
      */
-    id: string;
+    readonly id: string;
 
     /**
      * Create a new processMutex instance.
@@ -29,7 +28,7 @@ export class processMutex {
      * Returns null if the program is already running.
      *
      * @param name the name of the program
-     * @return a program_mutex instance or null if the program is already running
+     * @return a processMutex instance or null if the program is already running
      */
     static try_create(name: string): processMutex | null;
 }
@@ -41,7 +40,7 @@ export class sharedMutex {
     /**
      * The id of the mutex. Must not be modified.
      */
-    id: string;
+    readonly id: string;
 
     /**
      * Create a new shared_mutex instance

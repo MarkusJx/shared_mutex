@@ -6,9 +6,9 @@ const mutex = require('./index');
 describe('processMutex', () => {
     describe('#new processMutex', () => {
         const TEST = "test";
-        let mtx1;
+        let mtx;
         it('create: should not throw', () => {
-            mtx1 = new mutex.processMutex(TEST);
+            mtx = new mutex.processMutex(TEST);
         });
 
         it('create: should throw an exception', () => {
@@ -18,15 +18,15 @@ describe('processMutex', () => {
         });
 
         it('delete: should not throw', () => {
-            mtx1.delete();
+            mtx.delete();
         });
 
         it('delete: should throw', () => {
-            assert.throws(mtx1.delete, Error, "delete() was already called on this instance");
+            assert.throws(mtx.delete, Error, "delete() was already called on this instance");
         });
 
         it('re-create: should not throw', () => {
-            mtx1 = new mutex.processMutex(TEST);
+            mtx = new mutex.processMutex(TEST);
         });
 
         it('create in different process: should throw', (done) => {
@@ -40,7 +40,7 @@ describe('processMutex', () => {
         });
 
         it('re-delete: should not throw', () => {
-            mtx1.delete();
+            mtx.delete();
         });
 
         it('create in different process: should not throw', (done) => {

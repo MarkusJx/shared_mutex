@@ -2,53 +2,65 @@ const native_addon = require('./build/Release/shared_mutex');
 
 module.exports = {
     processMutex: class {
-        constructor(name, fromExisting = false, id = "") {
+        // Whether this was already deleted
+        #deleted = false;
+
+        constructor(name) {
+            // the name must be a string and at least one character long
             if (typeof name !== "string") {
                 throw new Error("The name must be of type string");
             } else if (name.length === 0) {
                 throw new Error("The name must not be empty");
             }
 
-            this.deleted = false;
-            if (!fromExisting) {
-                this.id = native_addon.lib_createProgramMutex(name);
-            } else {
-                this.id = id;
-                if (id.length === 0) {
-                    throw new Error("The id must not be empty");
-                }
-            }
+            // Define 'id' read-only
+            Object.defineProperty(this, 'id', {
+                value: native_addon.lib_createProgramMutex(name),
+                configurable: true,
+                enumerable: true,
+                writable: false
+            });
         }
 
         delete() {
-            if (!this.deleted) {
+            // If this was already deleted, throw an exception
+            if (!this.#deleted) {
                 native_addon.lib_deleteMutex(this.id);
-                this.deleted = true;
-                this.id = null;
+                this.#deleted = true;
             } else {
                 throw new Error("delete() was already called on this instance");
             }
         }
 
         static try_create(name) {
+            // Try creating a programMutex.
+            // if this fails, return null.
             try {
-                let id = native_addon.lib_createProgramMutex(name);
-                return new this(name, true, id);
+                return new this(name);
             } catch (ignored) {
                 return null;
             }
         }
     },
     sharedMutex: class {
+        // Whether this was already deleted
+        #deleted = false;
+
         constructor(name) {
+            // The name must be a string and at least one character long
             if (typeof name !== "string") {
                 throw new Error("The name must be of type string");
             } else if (name.length === 0) {
                 throw new Error("The name must not be empty");
             }
 
-            this.deleted = false;
-            this.id = native_addon.lib_createMutex(name);
+            // Define 'id' read-only
+            Object.defineProperty(this, 'id', {
+                value: native_addon.lib_createMutex(name),
+                configurable: true,
+                enumerable: true,
+                writable: false
+            });
         }
 
         lock_blocking() {
@@ -68,10 +80,10 @@ module.exports = {
         }
 
         delete() {
-            if (!this.deleted) {
+            // If this was already deleted, throw an exception
+            if (!this.#deleted) {
                 native_addon.lib_deleteMutex(this.id);
-                this.deleted = true;
-                this.id = null;
+                this.#deleted = true;
             } else {
                 throw new Error("delete() was already called on this instance");
             }
