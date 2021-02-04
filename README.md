@@ -1,6 +1,4 @@
-# shared_mutex
-
-Shared mutexes/semaphores in javascript.
+![shared_mutex](https://socialify.git.ci/MarkusJx/shared_mutex/image?description=1&descriptionEditable=Named%20mutexes%20for%20JavaScript&font=Inter&language=1&owner=1&pattern=Plus&theme=Light)
 
 ## Installation
 ```sh
