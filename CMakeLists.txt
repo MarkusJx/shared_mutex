@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(is_program_already_running)
+project(shared_mutex)
 
 execute_process(COMMAND node -p "require('@markusjx/n-api-tools').include"
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}

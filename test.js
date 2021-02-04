@@ -3,17 +3,17 @@ const assert = require("assert");
 
 const mutex = require('./index');
 
-describe('program_mutex', () => {
-    describe('#new program_mutex', () => {
+describe('processMutex', () => {
+    describe('#new processMutex', () => {
         const TEST = "test";
         let mtx1;
         it('create: should not throw', () => {
-            mtx1 = new mutex.process_mutex(TEST);
+            mtx1 = new mutex.processMutex(TEST);
         });
 
         it('create: should throw an exception', () => {
             assert.throws(() => {
-                new mutex.process_mutex(TEST);
+                new mutex.processMutex(TEST);
             }, Error, "A mutex with the name 'test' is already owned by this program");
         });
 
@@ -26,7 +26,7 @@ describe('program_mutex', () => {
         });
 
         it('re-create: should not throw', () => {
-            mtx1 = new mutex.process_mutex(TEST);
+            mtx1 = new mutex.processMutex(TEST);
         });
 
         it('create in different process: should throw', (done) => {
@@ -54,35 +54,35 @@ describe('program_mutex', () => {
         });
     });
 
-    describe('#try_create_process_mutex', () => {
+    describe('#processMutex.try_create', () => {
         let mtx;
-        it('create: should return program_mutex', () => {
-            mtx = mutex.try_create_process_mutex("test");
+        it('create: should return processMutex', () => {
+            mtx = mutex.processMutex.try_create("test");
             assert(mtx !== null, "mtx should not be null");
         });
 
         it('create: should return null', () => {
-            const val = mutex.try_create_process_mutex("test");
-            assert(val === null, "try_create_program_mutex should return null");
+            const val = mutex.processMutex.try_create("test");
+            assert(val === null, "processMutex.try_create should return null");
         });
 
         it('delete: should not throw', () => {
             mtx.delete();
         });
 
-        it('re-create: should return program_mutex', () => {
-            mtx = mutex.try_create_process_mutex("test");
+        it('re-create: should return processMutex', () => {
+            mtx = mutex.processMutex.try_create("test");
             assert(mtx !== null, "mtx should not be null");
             mtx.delete();
         });
     });
 });
 
-describe('shared_mutex', () => {
+describe('sharedMutex', () => {
     describe('#basic tests', () => {
         let mtx;
         it('create: should not throw', () => {
-            mtx = new mutex.shared_mutex("test");
+            mtx = new mutex.sharedMutex("test");
         });
 
         it('lock: should not throw', (done) => {
@@ -128,8 +128,8 @@ describe('shared_mutex', () => {
     describe('#shared tests', () => {
         let mtx1, mtx2;
         it('create: should not throw', () => {
-            mtx1 = new mutex.shared_mutex("test");
-            mtx2 = new mutex.shared_mutex("test");
+            mtx1 = new mutex.sharedMutex("test");
+            mtx2 = new mutex.sharedMutex("test");
         })
 
         it('lock first mutex: should lock the mutex', (done) => {

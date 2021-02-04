@@ -12,34 +12,34 @@ Check whether your program is already running.
 This script uses named semaphores to check whether a program is already running
 to make sure only one instance of a program is running at once. 
 
-You could use the ``delete`` method on an instance of the ``process_mutex`` class
+You could use the ``delete`` method on an instance of the ``processMutex`` class
 to allow another instance of your program to start. You don't have to do this,
 the semaphores will be automatically destroyed once the module is unloaded.
 
-#### ``new process_mutex``
-Create a new instance of ``process_mutex``. This will throw an exception if another
+#### ``new processMutex``
+Create a new instance of ``processMutex``. This will throw an exception if another
 instance already owns a mutex with the same name.
 ```js
-const lock = new shared_mutex.process_mutex("YOUR_PROGRAM_NAME");
+const lock = new shared_mutex.processMutex("YOUR_PROGRAM_NAME");
 ```
 
-#### ``process_mutex.delete``
+#### ``processMutex.delete``
 Delete the lock instance to release it and allow another
 instance to gain ownership of the mutex.
 ```js
 lock.delete();
 ```
 
-#### ``try_create_process_mutex``
+#### ``processMutex.try_create``
 It is also possible to try creating a program_mutex instance using
 ``try_create()``. The function will either return ``null`` if a
 semaphore with the same name already exists or a new instance of
 ``process_mutex`` if no semaphore with the same name already exists.
 ```js
-const try_lock = shared_mutex.try_create_process_mutex("YOUR_PROGRAM_NAME");
+const try_lock = shared_mutex.processMutex.try_create("YOUR_PROGRAM_NAME");
 ```
 
-#### ``process_mutex.delete``
+#### ``processMutex.delete``
 You can call ``delete()`` on the object to allow other instances to
 gain ownership of the mutex, if you want to. If not, this will
 automatically executed on module unload, so the semaphore will be
@@ -49,15 +49,13 @@ lock.delete();
 ```
 
 ### Shared mutexes
-#### ``new shared_mutex``
+#### ``new sharedMutex``
 Create a shared mutex
 ```js
-const shared_mutex = require('shared_mutex');
-
-const mutex = new shared_mutex.shared_mutex("A_MUTEX_NAME");
+const mutex = new shared_mutex.sharedMutex("A_MUTEX_NAME");
 ```
 
-#### ``shared_mutex.lock``
+#### ``sharedMutex.lock``
 Lock the mutex
 ```js
 mutex.lock().then(() => {
@@ -70,13 +68,13 @@ mutex.lock().then(() => {
 await mutex.lock();
 ```
 
-#### ``shared_mutex.lock_blocking``
+#### ``sharedMutex.lock_blocking``
 Blocking call (not recommended as it will freeze your node.js instance):
 ```js
 mutex.lock_blocking();
 ```
 
-#### ``shared_mutex.try_lock``
+#### ``sharedMutex.try_lock``
 Try locking the mutex: ``try_lock()`` will return ``true``, if the mutex ownership could
 be acquired. If so, the mutex will now be owned by your shared_mutex instance and must be
 unlocked using ``unlock()``. If another instance already owns the mutex, ``try_lock()``
@@ -94,18 +92,18 @@ if (could_lock) {
 }
 ```
 
-#### ``shared_mutex.unlock``
+#### ``sharedMutex.unlock``
 Unlocking the mutex so another instance can now acquire the ownership over the mutex:
 ```js
 mutex.unlock();
 ```
 
-#### ``shared_mutex.delete``
+#### ``sharedMutex.delete``
 Delete the mutex: ``delete()`` will also be called when the module is unloaded.
 ``delete()`` will also call ``unlock()`` if this instance of shared_mutex is
 currently the owner of the mutex, so any other instance can acquire ownership
 over the mutex as the current instance obviously does not need it anymore.
-NOTE: ``delete()`` can only be called once on a single ``shared_mutex`` instance.
+NOTE: ``delete()`` can only be called once on a single ``sharedMutex`` instance.
 ```js
 mutex.delete();
 ```

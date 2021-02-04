@@ -1,7 +1,7 @@
-const native_addon = require('./build/Release/is_program_already_running');
+const native_addon = require('./build/Release/shared_mutex');
 
 module.exports = {
-    process_mutex: class {
+    processMutex: class {
         constructor(name, fromExisting = false, id = "") {
             if (typeof name !== "string") {
                 throw new Error("The name must be of type string");
@@ -29,8 +29,17 @@ module.exports = {
                 throw new Error("delete() was already called on this instance");
             }
         }
+
+        static try_create(name) {
+            try {
+                let id = native_addon.lib_createProgramMutex(name);
+                return new this(name, true, id);
+            } catch (ignored) {
+                return null;
+            }
+        }
     },
-    shared_mutex: class {
+    sharedMutex: class {
         constructor(name) {
             if (typeof name !== "string") {
                 throw new Error("The name must be of type string");
@@ -66,14 +75,6 @@ module.exports = {
             } else {
                 throw new Error("delete() was already called on this instance");
             }
-        }
-    },
-    try_create_process_mutex: function (name) {
-        try {
-            let id = native_addon.lib_createProgramMutex(name);
-            return new this.process_mutex(name, true, id);
-        } catch (e) {
-            return null;
         }
     }
 }
