@@ -1,6 +1,13 @@
 # shared_mutex
 
 Shared mutexes/semaphores in javascript.
+
+## Installation
+```sh
+npm install @markusjx/shared_mutex
+```
+*Requires Node.js 12 or later*
+
 ## Usage
 ### Import the module
 ```js
