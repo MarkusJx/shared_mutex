@@ -1,4 +1,4 @@
-const native_addon = require('./build/Release/shared_mutex');
+const native_addon = require('./bin/shared_mutex');
 
 module.exports = {
     processMutex: class {

@@ -1,11 +1,13 @@
 {
   "name": "@markusjx/shared_mutex",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Shared mutexes for javascript. Can also check if your program is already running.",
   "main": "index.js",
   "scripts": {
     "install": "npm run-script build",
+    "postinstall": "node install.js",
     "build": "cmake-js compile",
+    "postbuild": "node install.js --post_build",
     "test": "mocha",
     "pretest": "npm run-script build",
     "clean": "cmake-js clean"
@@ -16,7 +18,7 @@
     "mocha": "^8.2.1"
   },
   "dependencies": {
-    "@markusjx/n-api-tools": "^1.0.0",
+    "@markusjx/n-api-tools": "^1.0.2",
     "cmake-js": "^6.1.0",
     "node-addon-api": "^3.1.0"
   }
