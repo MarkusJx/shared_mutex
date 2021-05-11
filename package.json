@@ -1,6 +1,6 @@
 {
   "name": "@markusjx/shared_mutex",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Shared mutexes for javascript. Can also check if your program is already running.",
   "main": "index.js",
   "scripts": {
@@ -15,10 +15,10 @@
   "author": "MarkusJx",
   "license": "MIT",
   "devDependencies": {
-    "mocha": "^8.2.1"
+    "mocha": "^8.4.0"
   },
   "dependencies": {
-    "@markusjx/n-api-tools": "^1.0.2",
+    "@markusjx/n-api-tools": "^1.1.0",
     "cmake-js": "^6.1.0",
     "node-addon-api": "^3.1.0"
   }
