@@ -1,4 +1,4 @@
-[![shared_mutex](https://socialify.git.ci/MarkusJx/shared_mutex/image?description=1&descriptionEditable=Shared%2FNamed%20mutexes%20for%20JavaScript&language=1&owner=1&theme=Light)](README.md)
+[![shared_mutex](https://socialify.git.ci/MarkusJx/shared_mutex/image?description=1&descriptionEditable=Shared%2FNamed%20mutexes%20for%20JavaScript&language=1&owner=1&theme=Light)](https://github.com/MarkusJx/shared_mutex#readme)
 
 ## Installation
 ```sh
