@@ -1,5 +1,5 @@
-#ifndef PROGRAM_IS_ALREADY_RUNNING_SHARED_MUTEX_HPP
-#define PROGRAM_IS_ALREADY_RUNNING_SHARED_MUTEX_HPP
+#ifndef SHARED_MUTEX_SHARED_MUTEX_HPP
+#define SHARED_MUTEX_SHARED_MUTEX_HPP
 
 #include <string>
 #include <exception>
@@ -16,7 +16,7 @@
 
 #ifdef OS_WINDOWS
 
-#   include <windows.h>
+#   include <Windows.h>
 
 #elif defined(OS_UNIX)
 
@@ -69,7 +69,7 @@ public:
      * @param openIfExists whether to open if the mutex already exists or throw an exception
      * @return a pointer to the mutex
      */
-    static std::unique_ptr<shared_mutex> createShared_mutex(const std::string &mtx_name, bool openIfExists);
+    static inline std::unique_ptr<shared_mutex> createShared_mutex(const std::string &mtx_name, bool openIfExists);
 
     /**
      * Create a shared_mutex instance.
@@ -476,4 +476,4 @@ std::unique_ptr<shared_mutex> shared_mutex::createShared_mutex(const std::string
 #endif //OS_WINDOWS
 }
 
-#endif //PROGRAM_IS_ALREADY_RUNNING_SHARED_MUTEX_HPP
+#endif //SHARED_MUTEX_SHARED_MUTEX_HPP

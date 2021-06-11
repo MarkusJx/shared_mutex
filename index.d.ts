@@ -3,12 +3,7 @@
  * Uses named mutexes/semaphores to detect if the program is already running.
  * Can also check if other programs using @markusjx/shared_semaphore are running.
  */
-export class processMutex {
-    /**
-     * The id of the mutex. Must not be modified.
-     */
-    readonly id: string;
-
+export class process_mutex {
     /**
      * Create a new processMutex instance.
      * Throws an error if the program is already running.
@@ -21,7 +16,7 @@ export class processMutex {
      * Delete this instance's named mutex/semaphore
      * and mark this program therefore as 'not running'.
      */
-    delete(): void;
+    destroy(): void;
 
     /**
      * Try creating a processMutex instance.
@@ -30,18 +25,13 @@ export class processMutex {
      * @param name the name of the program
      * @return a processMutex instance or null if the program is already running
      */
-    static try_create(name: string): processMutex | null;
+    static try_create(name: string): process_mutex | null;
 }
 
 /**
  * A shared mutex
  */
-export class sharedMutex {
-    /**
-     * The id of the mutex. Must not be modified.
-     */
-    readonly id: string;
-
+export class shared_mutex {
     /**
      * Create a new shared_mutex instance
      *
@@ -83,5 +73,5 @@ export class sharedMutex {
     /**
      * Delete the shared_mutex
      */
-    delete(): void;
+    destroy(): void;
 }

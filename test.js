@@ -8,25 +8,25 @@ describe('processMutex', () => {
         const TEST = "test";
         let mtx;
         it('create: should not throw', () => {
-            mtx = new mutex.processMutex(TEST);
+            mtx = new mutex.process_mutex(TEST);
         });
 
         it('create: should throw an exception', () => {
             assert.throws(() => {
-                new mutex.processMutex(TEST);
+                new mutex.process_mutex(TEST);
             }, Error, "A mutex with the name 'test' is already owned by this program");
         });
 
         it('delete: should not throw', () => {
-            mtx.delete();
+            mtx.destroy();
         });
 
         it('delete: should throw', () => {
-            assert.throws(mtx.delete, Error, "delete() was already called on this instance");
+            assert.throws(mtx.destroy, Error, "delete() was already called on this instance");
         });
 
         it('re-create: should not throw', () => {
-            mtx = new mutex.processMutex(TEST);
+            mtx = new mutex.process_mutex(TEST);
         });
 
         it('create in different process: should throw', (done) => {
@@ -40,7 +40,7 @@ describe('processMutex', () => {
         });
 
         it('re-delete: should not throw', () => {
-            mtx.delete();
+            mtx.destroy();
         });
 
         it('create in different process: should not throw', (done) => {
@@ -57,23 +57,23 @@ describe('processMutex', () => {
     describe('#processMutex.try_create', () => {
         let mtx;
         it('create: should return processMutex', () => {
-            mtx = mutex.processMutex.try_create("test");
+            mtx = mutex.process_mutex.try_create("test");
             assert(mtx !== null, "mtx should not be null");
         });
 
         it('create: should return null', () => {
-            const val = mutex.processMutex.try_create("test");
+            const val = mutex.process_mutex.try_create("test");
             assert(val === null, "processMutex.try_create should return null");
         });
 
         it('delete: should not throw', () => {
-            mtx.delete();
+            mtx.destroy();
         });
 
         it('re-create: should return processMutex', () => {
-            mtx = mutex.processMutex.try_create("test");
+            mtx = mutex.process_mutex.try_create("test");
             assert(mtx !== null, "mtx should not be null");
-            mtx.delete();
+            mtx.destroy();
         });
     });
 });
@@ -82,7 +82,7 @@ describe('sharedMutex', () => {
     describe('#basic tests', () => {
         let mtx;
         it('create: should not throw', () => {
-            mtx = new mutex.sharedMutex("test");
+            mtx = new mutex.shared_mutex("test");
         });
 
         it('lock: should not throw', (done) => {
@@ -120,16 +120,16 @@ describe('sharedMutex', () => {
         });
 
         it('delete: should delete the mutex', () => {
-            mtx.delete();
-            assert.throws(mtx.delete, Error, "delete() was already called on this instance");
+            mtx.destroy();
+            assert.throws(mtx.destroy, Error, "delete() was already called on this instance");
         });
     });
 
     describe('#shared tests', () => {
         let mtx1, mtx2;
         it('create: should not throw', () => {
-            mtx1 = new mutex.sharedMutex("test");
-            mtx2 = new mutex.sharedMutex("test");
+            mtx1 = new mutex.shared_mutex("test");
+            mtx2 = new mutex.shared_mutex("test");
         })
 
         it('lock first mutex: should lock the mutex', (done) => {
@@ -161,7 +161,7 @@ describe('sharedMutex', () => {
         });
 
         it('delete the first mutex: should not throw', () => {
-            mtx1.delete();
+            mtx1.destroy();
         });
 
         it('try lock the second mutex again: should return false', () => {
@@ -183,7 +183,7 @@ describe('sharedMutex', () => {
         });
 
         it('delete the second mutex: should not throw', () => {
-            mtx2.delete();
+            mtx2.destroy();
         });
     });
 });

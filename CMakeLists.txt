@@ -10,7 +10,8 @@ include_directories(${CMAKE_JS_INC} ${N_API_TOOLS_DIR})
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_library(${PROJECT_NAME} SHARED addon.cpp shared_mutex.hpp ${CMAKE_JS_SRC})
+add_library(${PROJECT_NAME} SHARED src/addon.cpp src/shared_mutex.hpp ${CMAKE_JS_SRC} src/node_shared_mutex.cpp
+        src/node_shared_mutex.hpp src/process_mutex.cpp src/process_mutex.hpp)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
 target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB})
@@ -25,4 +26,4 @@ string(REPLACE "\"" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${NODE_ADDON_API_DIR})
 
 # define NAPI_VERSION
-add_definitions(-DNAPI_VERSION=4)
+add_definitions(-DNAPI_VERSION=6)
